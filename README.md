@@ -1,49 +1,69 @@
-O **problema do caixeiro viajante** (TSP - Traveling Salesperson Problem) é um dos problemas clássicos de otimização combinatória. Ele consiste no seguinte: dado um conjunto de cidades e as distâncias entre elas, determinar a rota mais curta possível que visite todas as cidades exatamente uma vez e retorne à cidade de origem.
+# Algoritmo Genético para o Problema do Caixeiro Viajante
 
-### Características principais:
-1. **Entrada:**
-   - Um conjunto de cidades (n pontos) e as distâncias entre cada par de cidades.
-2. **Objetivo:**
-   - Encontrar a rota de menor custo (ou menor distância total).
-3. **Restrições:**
-   - Cada cidade deve ser visitada exatamente uma vez.
-   - O ponto inicial e final da viagem deve ser o mesmo.
+Este projeto implementa uma solução para o **Problema do Caixeiro Viajante** (TSP) utilizando um algoritmo genético. O objetivo é encontrar a rota mais curta que passe por todas as cidades, retornando à cidade inicial. A solução é visualizada em um mapa, com a rota plotada ao longo das gerações.
 
-### Complexidade
-O TSP pertence à classe de problemas NP-difíceis, ou seja, conforme o número de cidades aumenta, o tempo de resolução cresce exponencialmente. Para \(n\) cidades, o número de rotas possíveis é \((n-1)!\).
+## Requisitos
 
----
+- Python 3.13
+- Bibliotecas:
+  - `random`
+  - `numpy`
+  - `matplotlib`
+  - `cartopy`
 
-### Abordagens para solução:
+Você pode instalar as dependências necessárias utilizando o `pip`:
 
-#### 1. **Método Exaustivo (Força Bruta):**
-   - Examina todas as rotas possíveis.
-   - Impraticável para grandes valores de \(n\), mas garante a solução ótima.
+```bash
+pip install -r requirements.txt
+```
 
-#### 2. **Programação Dinâmica (Algoritmo de Held-Karp):**
-   - Reduz a complexidade para \(O(n^2 \cdot 2^n)\), mas ainda é viável apenas para problemas pequenos.
+## Estrutura do Código
 
-#### 3. **Heurísticas:**
-   - Oferecem boas soluções em tempo reduzido, mas sem garantia de serem ótimas.
-   - Exemplos:
-     - **Algoritmo do Vizinho Mais Próximo**: Começa em uma cidade e sempre vai para a mais próxima ainda não visitada.
-     - **Algoritmo do Circuito Mais Barato**: Conecta pontos próximos até formar um circuito válido.
+### Módulos
 
-#### 4. **Meta-heurísticas:**
-   - Fornecem soluções aproximadas para problemas maiores.
-   - Exemplos:
-     - **Algoritmo Genético**.
-     - **Simulated Annealing**.
-     - **Colônia de Formigas (Ant Colony Optimization)**.
+- **cartopy**: Usado para a visualização do mapa e plotagem das rotas.
+- **matplotlib**: Para visualização gráfica.
+- **numpy**: Para cálculos de distâncias.
+- **random**: Para aleatoriedade nas escolhas do algoritmo genético.
 
-#### 5. **Métodos Exatos:**
-   - Baseados em **Programação Linear Inteira** ou **Branch and Bound**, que garantem a solução ótima, mas têm alta complexidade.
+### Parâmetros de Configuração
 
----
+No início do código, é possível configurar diversos parâmetros que afetam o comportamento do algoritmo e da visualização:
 
-### Aplicações
-O TSP é mais do que um problema teórico; ele é aplicado em diversas áreas como:
-- Logística e transporte (planejamento de rotas).
-- Impressão de circuitos eletrônicos.
-- Planejamento de trajetos para drones.
-- Serviços de entregas (ex.: otimização de rotas para entregadores).
+- **Número de cidades** (`num_cidades_plot`): Define quantas cidades serão consideradas no cálculo. O valor deve ser entre 2 e 48.
+- **Número de gerações** (`num_geracoes`): Define o número de gerações do algoritmo genético.
+- **Cor do mapa** (`mapa_cor`): Define se o mapa será colorido ou não.
+- **Zoom do mapa** (`mapa_zoom`): Define se o mapa será exibido com zoom ou não.
+- **Parâmetros do algoritmo genético**:
+  - **Tamanho da população** (`tamanho_populacao`): Número de indivíduos na população.
+  - **Taxa de mutação** (`taxa_mutacao`): Probabilidade de ocorrer uma mutação em um cromossomo.
+  
+### Funções
+
+- **`calcular_distancia(cidade1, cidade2)`**: Calcula a distância Euclidiana entre duas cidades.
+- **`calcular_custo(cromossomo)`**: Calcula o custo total (distância) de uma rota representada por um cromossomo.
+- **`gerar_populacao_inicial()`**: Gera a população inicial aleatória de rotas.
+- **`selecionar_pais(populacao)`**: Seleciona dois pais para o cruzamento, com base na probabilidade proporcional ao custo.
+- **`cruzar(pai1, pai2)`**: Realiza o cruzamento entre dois cromossomos (pais).
+- **`mutar(cromossomo)`**: Aplica a mutação em um cromossomo.
+- **`plotar_rota(melhor_cromossomo, geracao, ax)`**: Plota a melhor rota da geração atual em um mapa.
+- **`algoritmo_genetico()`**: Função principal que executa o algoritmo genético.
+
+### Como Executar
+
+1. Altere o arquivo `cidades.py` para definir as cidades e suas coordenadas (no formato de dicionário `{"cidade_nome": (latitude, longitude)}`).
+2. Defina o número de cidades e o número de gerações no início do código.
+3. Execute o script:
+
+```bash
+python main.py
+```
+
+O algoritmo exibirá uma visualização interativa do mapa com as rotas geradas ao longo das gerações. O progresso do melhor custo encontrado será mostrado no console.
+
+### Exemplo de Saída
+
+```
+Geração 10: Melhor custo = 245.3
+Melhor rota: Cidade A -> Cidade B -> Cidade C -> ...
+```
